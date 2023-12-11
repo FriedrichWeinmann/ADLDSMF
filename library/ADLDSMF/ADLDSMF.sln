@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{5F283B75-BA64-425F-9E57-44E6910D65BB}") = "ADLDSMF", "ADLDSMF\ADLDSMF.csproj", "{5CF66DB4-3267-42EF-9800-5FE9DD4B38F7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5CF66DB4-3267-42EF-9800-5FE9DD4B38F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CF66DB4-3267-42EF-9800-5FE9DD4B38F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CF66DB4-3267-42EF-9800-5FE9DD4B38F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CF66DB4-3267-42EF-9800-5FE9DD4B38F7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A5BF4709-619A-4F09-BAB8-030EC1F60DC4}
+	EndGlobalSection
+EndGlobal
