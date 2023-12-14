@@ -2,9 +2,9 @@
 	user               = @{ }
 	group              = @{ }
 	organizationalUnit = @{ }
-	groupmemberships   = @{ }
-	accessrules        = @{ }
-	SchemaAttributes   = @{ }
+	groupmembership    = @{ }
+	accessrule         = @{ }
+	SchemaAttribute    = @{ }
 }
 
 $script:adrights = @{

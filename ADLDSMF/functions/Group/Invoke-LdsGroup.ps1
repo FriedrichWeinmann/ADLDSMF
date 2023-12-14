@@ -1,4 +1,34 @@
 ﻿function Invoke-LdsGroup {
+	<#
+	.SYNOPSIS
+		Applies all configured groups.
+	
+	.DESCRIPTION
+		Applies all configured groups, creating or updating their settings as needed.
+	
+	.PARAMETER Server
+		The LDS Server to target.
+	
+	.PARAMETER Partition
+		The Partition on the LDS Server to target.
+	
+	.PARAMETER Credential
+		Credentials to use for the operation.
+	
+	.PARAMETER Delete
+		Undo everything defined in configuration.
+		Allows rolling back after deployment.
+	
+	.PARAMETER TestResult
+		Result objects of the associated Test-Command.
+		Allows cherry-picking which change to apply.
+		If not specified, it will a test and apply all test results instead.
+	
+	.EXAMPLE
+		PS C:\> Invoke-LdsGroup -Server lds1.contoso.com -Partition 'DC=fabrikam,DC=org'
+
+		Applies all configured groups to 'DC=fabrikam,DC=org' on the server 'lds1.contoso.com'.
+	#>
 	[CmdletBinding()]
 	Param (
 		[Parameter(Mandatory = $true)]

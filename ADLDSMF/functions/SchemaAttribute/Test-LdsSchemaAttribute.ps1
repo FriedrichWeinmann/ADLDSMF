@@ -1,4 +1,25 @@
 ﻿function Test-LdsSchemaAttribute {
+	<#
+	.SYNOPSIS
+		Tests, whether the intended schema attributes have been applied.
+	
+	.DESCRIPTION
+		Tests, whether the intended schema attributes have been applied.
+	
+	.PARAMETER Server
+		The LDS Server to target.
+	
+	.PARAMETER Partition
+		The Partition on the LDS Server to target.
+	
+	.PARAMETER Credential
+		Credentials to use for the operation.
+	
+	.EXAMPLE
+		PS C:\> Test-LdsSchemaAttribute -Server lds1.contoso.com -Partition 'DC=fabrikam,DC=org'
+
+		Tests, whether the intended schema attributes have been applied to 'DC=fabrikam,DC=org' on lds1.contoso.com
+	#>
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -23,7 +44,7 @@
 		$classes = Get-ADObject @ldsParamLight -SearchBase $rootDSE.schemaNamingContext -LDAPFilter '(objectClass=classSchema)' -Properties mayContain, adminDisplayName
 	}
 	process {
-		foreach ($schemaSetting in $script:content.SchemaAttributes.Values) {
+		foreach ($schemaSetting in $script:content.SchemaAttribute.Values) {
 			$schemaObject = $null
 			$schemaObject = Get-ADObject @ldsParamLight -LDAPFilter "(attributeID=$($schemaSetting.AttributeID))" -SearchBase $rootDSE.schemaNamingContext -ErrorAction Ignore -Properties *
 			$resultDefaults = @{

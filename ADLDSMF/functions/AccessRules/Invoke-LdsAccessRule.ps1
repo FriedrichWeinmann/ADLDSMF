@@ -1,4 +1,34 @@
 ﻿function Invoke-LdsAccessRule {
+	<#
+	.SYNOPSIS
+		Applies all the configured access rules.
+	
+	.DESCRIPTION
+		Applies all the configured access rules.
+	
+	.PARAMETER Server
+		The LDS Server to target.
+	
+	.PARAMETER Partition
+		The Partition on the LDS Server to target.
+	
+	.PARAMETER Credential
+		Credentials to use for the operation.
+	
+	.PARAMETER Delete
+		Undo everything defined in configuration.
+		Allows rolling back after deployment.
+	
+	.PARAMETER TestResult
+		Result objects of the associated Test-Command.
+		Allows cherry-picking which change to apply.
+		If not specified, it will a test and apply all test results instead.
+	
+	.EXAMPLE
+		PS C:\> Invoke-LdsAccessRule -Server lds1.contoso.com -Partition 'DC=fabrikam,DC=org'
+
+		Apply all configured access rules to the 'DC=fabrikam,DC=org' partition on lds1.contoso.com
+	#>
 	[CmdletBinding()]
 	Param (
 		[Parameter(Mandatory = $true)]
@@ -26,7 +56,7 @@
 	}
 	process {
 		if (-not $TestResult) {
-			$TestResult = Test-LdsAccessRule @ldsParam -Partition $Partition
+			$TestResult = Test-LdsAccessRule @ldsParam -Partition $Partition -Delete:$Delete
 		}
 		foreach ($testItem in $TestResult | Sort-Object Action -Descending) {
 			switch ($testItem.Action) {

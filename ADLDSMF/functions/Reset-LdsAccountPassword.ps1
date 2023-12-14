@@ -15,6 +15,10 @@
 	
 	.PARAMETER Partition
 		Partition of the LDS Server to search.
+
+	.PARAMETER NewPassword
+		The new password to assign.
+		Autogenerates a random password if not specified.
 	
 	.PARAMETER Credential
 		Credential to use for the request
@@ -24,6 +28,7 @@
 		
 		Resets the password of account 'svc_whatever'
 	#>
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -37,6 +42,9 @@
 		[Parameter(Mandatory = $true)]
 		[string]
 		$Partition,
+
+		[SecureString]
+		$NewPassword = (New-Password -AsSecureString),
 
 		[PSCredential]
 		$Credential
@@ -53,8 +61,7 @@
 		Stop-PSFFunction -Cmdlet $PSCmdlet -Message "More than one account found for $UserName!`n$($userObject.DistinguishedName -join "`n")" -EnableException $true
 	}
 
-	$password = New-Password -AsSecureString
-	Set-ADAccountPassword @ldsParam -NewPassword $password -Identity $userObject.ObjectGUID
+	Set-ADAccountPassword @ldsParam -NewPassword $NewPassword -Identity $userObject.ObjectGUID
 
 	if (-not $userObject.Enabled) {
 		Write-PSFMessage -Level Host -Message "Enabling account: $($userObject.Name)"
@@ -63,7 +70,7 @@
 
 	Write-PSFMessage -Level Host -Message "Password reset for $($userObject.Name) executed."
 	$null = Read-Host "Press enter to paste the new password to the clipboard."
-	$cred = [PSCredential]::new("whatever", $password)
+	$cred = [PSCredential]::new("whatever", $NewPassword)
 	$cred.GetNetworkCredential().Password | Set-Clipboard
 	Write-PSFMessage -Level Host -Message "Password for $($userObject.Name) has been written to clipboard."
 }
