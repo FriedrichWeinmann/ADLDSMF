@@ -1,4 +1,29 @@
 ﻿function Test-LdsAccessRule {
+	<#
+	.SYNOPSIS
+		Tests, whether the current access rules match the configured state.
+	
+	.DESCRIPTION
+		Tests, whether the current access rules match the configured state.
+	
+	.PARAMETER Server
+		The LDS Server to target.
+	
+	.PARAMETER Partition
+		The Partition on the LDS Server to target.
+	
+	.PARAMETER Credential
+		Credentials to use for the operation.
+	
+	.PARAMETER Delete
+		Undo everything defined in configuration.
+		Allows rolling back after deployment.
+	
+	.EXAMPLE
+		PS C:\> Test-LdsAccessRule -Server lds1.contoso.com -Partition 'DC=fabrikam,DC=org'
+
+		Tests, whether the current access rules on lds1.contoso.com match the configured state.
+	#>
 	[CmdletBinding()]
 	Param (
 		[Parameter(Mandatory = $true)]
@@ -19,6 +44,7 @@
 	begin {
 		#region Functions
 		function Resolve-AccessRule {
+			[OutputType([System.DirectoryServices.ActiveDirectoryAccessRule])]
 			[CmdletBinding()]
 			param (
 				[Parameter(Mandatory = $true)]
@@ -173,7 +199,7 @@
 	}
 	process {
 		#region Adding
-		foreach ($ruleCfg in $script:content.accessrules.Values) {
+		foreach ($ruleCfg in $script:content.accessrule.Values) {
 			$resolvedPath = $ruleCfg.Path -replace '%DomainDN%', $Partition
 			try { $rule = Resolve-AccessRule @ldsParam -RuleCfg $ruleCfg -SchemaCache $schemaCache -PrincipalCache $principals -DomainSID $domainSID }
 			catch {
@@ -186,7 +212,6 @@
 			$acl = Get-AdsAcl @ldsParamLight -Path $resolvedPath
 			$currentRules = $acl.GetAccessRules($true, $false, [System.Security.Principal.SecurityIdentifier])
 			$matching = $currentRules | Compare-AccessRule -Reference $rule
-			if ($matching) { continue }
 
 			$change = [PSCustomObject]@{
 				Path  = $resolvedPath
@@ -199,6 +224,15 @@
 				if ('Allow' -eq $this.Type) { '{0} -> {1}' -f $this.Name, $this.Right }
 				else { '{0} != {1}' -f $this.Name, $this.Right }
 			}
+
+			if ($matching) {
+				if ($Delete) {
+					$change.Rule = $matching
+					New-TestResult -Type AccessRule -Action Remove -Identity $resolvedPath -Configuration $ruleCfg -ADObject $acl -Change $change
+				}
+				continue
+			}
+			if ($Delete) { continue }
 
 			New-TestResult -Type AccessRule -Action Add -Identity $resolvedPath -Configuration $ruleCfg -ADObject $acl -Change $change
 		}

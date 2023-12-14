@@ -12,6 +12,7 @@
 		
 		Injects Get-LdsDomain into the ADSec module to overwrite its use of Get-ADDomain.
 	#>
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
 	[CmdletBinding()]
 	param ()
 

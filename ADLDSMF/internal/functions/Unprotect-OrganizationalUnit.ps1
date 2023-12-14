@@ -1,4 +1,30 @@
 ﻿function Unprotect-OrganizationalUnit {
+	<#
+	.SYNOPSIS
+		Removes deny rules on OrganizationalUnits.
+	
+	.DESCRIPTION
+		Removes deny rules on OrganizationalUnits.
+		Necessary whenever we want to delete an OU.
+	
+	.PARAMETER Server
+		The LDS Server to target.
+	
+	.PARAMETER Partition
+		The Partition on the LDS Server to target.
+	
+	.PARAMETER Credential
+		Credentials to use for the operation.
+	
+	.PARAMETER Identity
+		The OU to unprotect.
+		Specify the full distinguishedname.
+	
+	.EXAMPLE
+		PS C:\> Unprotect-OrganizationalUnit @ldsParam -Identity $ouPath
+		
+		Removes the deletion protection from the OU specified in $ouPath
+	#>
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true)]

@@ -1,31 +1,99 @@
-﻿# Description
+﻿# Welcome to the AD LDS Management Framework
 
-Insert a useful description for the ADLDSMF project here.
+This little project tries to enable a simplified content provisioning for AD LDS Instances.
+You provide the content as configuration settings (static or dynamic) and it will do the rest.
 
-Remember, it's the first thing a visitor will see.
+## Install
 
-# Project Setup Instructions
-## Working with the layout
+To install the module, run this line:
 
-- Don't touch the psm1 file
-- Place functions you export in `functions/` (can have subfolders)
-- Place private/internal functions invisible to the user in `internal/functions` (can have subfolders)
-- Don't add code directly to the `postimport.ps1` or `preimport.ps1`.
-  Those files are designed to import other files only.
-- When adding files & folders, make sure they are covered by either `postimport.ps1` or `preimport.ps1`.
-  This adds them to both the import and the build sequence.
+```powershell
+Install-Module ADLDSMF -Scope CurrentUser
+```
 
-## Setting up CI/CD
+Or on an updated machine or the latest version of PowerShell:
 
-> To create a PR validation pipeline, set up tasks like this:
+```powershell
+Install-PSResource ADLDSMF
+```
 
-- Install Prerequisites (PowerShell Task; VSTS-Prerequisites.ps1)
-- Validate (PowerShell Task; VSTS-Validate.ps1)
-- Publish Test Results (Publish Test Results; NUnit format; Run no matter what)
+## Profit
 
-> To create a build/publish pipeline, set up tasks like this:
+To use this system you need to provide the set of configuration settings to apply.
+Afterwards, running the module against an LDS Instance will have it check for the defined content and create / update as needed.
 
-- Install Prerequisites (PowerShell Task; VSTS-Prerequisites.ps1)
-- Validate (PowerShell Task; VSTS-Validate.ps1)
-- Build (PowerShell Task; VSTS-Build.ps1)
-- Publish Test Results (Publish Test Results; NUnit format; Run no matter what)
+Two examples have been provided in the `examples` folder, the following code assumes you have downloaded this github repository, imported the module and set the current path of your PowerShell console to the root path of this project.
+
+> Example 1: Fixed Content
+
+In this example, each configuration file only has static, hard-coded values and is placed in a folder matching its object type.
+
+[Content](examples/1-plain-content)
+
+```powershell
+# Load Configuration
+Import-LdsConfiguration -Path '.\examples\1-plain-content'
+
+# Test / Preview changes against the AD LDS server
+Test-LdsConfiguration -Server lds1.contoso.com -Partition 'DC=Fabrikam,DC=org'
+
+# Apply Changes
+Invoke-LdsConfiguration -Server lds1.contoso.com -Partition 'DC=Fabrikam,DC=org'
+```
+
+> Example 2: Dynamic Content
+
+In this example, we have but a single configuration file, which defines all kinds of settings.
+In contravention to PowerShell standards, this configuration file can define and interpret variables.
+
+[Content](examples/2-dynamic/node-alpha.psd1)
+
+```powershell
+# Load Configuration
+Import-LdsConfiguration -Path '.\examples\2-dynamic'
+
+# Test / Preview changes against the AD LDS server
+Test-LdsConfiguration -Server lds1.contoso.com -Partition 'DC=Fabrikam,DC=org'
+
+# Apply Changes
+Invoke-LdsConfiguration -Server lds1.contoso.com -Partition 'DC=Fabrikam,DC=org'
+```
+
+> Combining multiple configurations
+
+It is perfectly possible to combine multiple configuration sets, simple call `Import-LdsConfiguration` multiple times:
+
+```powershell
+# Load Configurations
+Import-LdsConfiguration -Path '.\examples\1-plain-content'
+Import-LdsConfiguration -Path '.\examples\2-dynamic'
+
+# Test / Preview changes against the AD LDS server
+Test-LdsConfiguration -Server lds1.contoso.com -Partition 'DC=Fabrikam,DC=org'
+
+# Apply Changes
+Invoke-LdsConfiguration -Server lds1.contoso.com -Partition 'DC=Fabrikam,DC=org'
+```
+
+> Clearing Configurations
+
+To reset the loaded configuration settings, there are two options:
+
++ Import ADLDSMF again
++ Use `Reset-LdsConfiguration`
+
+> User Account Passwords
+
+When defining a user object through ADLDSMF, it is not possible to specify a password - it will be automatically generated for enabled user objects.
+As this is usually not all that useful, you can use `Reset-LdsAccountPassword` to generate a new password and have it set to your clipboard.
+You can also specify a custom password instead, if you need to bulk-assign passwords instead:
+
+```powershell
+# Interactive password reset
+Reset-LdsAccountPassword -Name svc_whatever -Server lds1.contoso.com -Partition 'DC=fabrikam,DC=org'
+
+# Updating in bulk:
+$users | ForEach-Object {
+    Reset-LdsAccountPassword -Name $_.Name -Password $_.Password -Server lds1.contoso.com -Partition 'DC=fabrikam,DC=org'
+}
+```

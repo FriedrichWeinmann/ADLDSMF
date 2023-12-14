@@ -1,4 +1,29 @@
 ﻿function Test-LdsUser {
+	<#
+	.SYNOPSIS
+		Tests, whether the desired users have already been created.
+	
+	.DESCRIPTION
+		Tests, whether the desired users have already been created.
+	
+	.PARAMETER Server
+		The LDS Server to target.
+	
+	.PARAMETER Partition
+		The Partition on the LDS Server to target.
+	
+	.PARAMETER Credential
+		Credentials to use for the operation.
+	
+	.PARAMETER Delete
+		Undo everything defined in configuration.
+		Allows rolling back after deployment.
+	
+	.EXAMPLE
+		PS C:\> Test-LdsUser -Server lds1.contoso.com -Partition 'DC=fabrikam,DC=org'
+
+		Tests, whether the desired users have already been created for 'DC=fabrikam,DC=org' on lds1.contoso.com
+	#>
 	[CmdletBinding()]
 	Param (
 		[Parameter(Mandatory = $true)]
@@ -32,7 +57,7 @@
 			$resultDefaults = @{
 				Type = 'User'
 				Identity = $path
-				Configuration = $configurationItem	
+				Configuration = $configurationItem
 			}
 
 			$failed = $null

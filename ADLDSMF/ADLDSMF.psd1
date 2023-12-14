@@ -27,6 +27,7 @@
 	# this module
 	RequiredModules   = @(
 		@{ ModuleName = 'PSFramework'; ModuleVersion = '1.10.318' }
+		@{ ModuleName = 'ADSec'; ModuleVersion = '1.0.1' }
 	)
 	
 	# Assemblies that must be loaded prior to importing this module
@@ -82,19 +83,19 @@
 		PSData = @{
 			
 			# Tags applied to this module. These help with module discovery in online galleries.
-			# Tags = @()
+			Tags = @('ldap','adlds')
 			
 			# A URL to the license for this module.
-			# LicenseUri = ''
+			LicenseUri = 'https://github.com/FriedrichWeinmann/ADLDSMF/blob/master/LICENSE'
 			
 			# A URL to the main website for this project.
-			# ProjectUri = ''
+			ProjectUri = 'https://github.com/FriedrichWeinmann/ADLDSMF'
 			
 			# A URL to an icon representing this module.
 			# IconUri = ''
 			
 			# ReleaseNotes of this module
-			# ReleaseNotes = ''
+			ReleaseNotes = 'https://github.com/FriedrichWeinmann/ADLDSMF/blob/master/ADLDSMF/changelog.md'
 			
 		} # End of PSData hashtable
 		
