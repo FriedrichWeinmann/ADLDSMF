@@ -3,7 +3,7 @@
 	RootModule        = 'ADLDSMF.psm1'
 	
 	# Version number of this module.
-	ModuleVersion     = '1.0.0'
+	ModuleVersion     = '1.0.2'
 	
 	# ID used to uniquely identify this module
 	GUID              = '4152b344-748f-43f4-9982-e0f0bec21185'
