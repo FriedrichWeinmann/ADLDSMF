@@ -26,7 +26,7 @@
 	# Modules that must be imported into the global environment prior to importing
 	# this module
 	RequiredModules   = @(
-		@{ ModuleName = 'PSFramework'; ModuleVersion = '1.10.318' }
+		@{ ModuleName = 'PSFramework'; ModuleVersion = '1.12.346' }
 		@{ ModuleName = 'ADSec'; ModuleVersion = '1.0.1' }
 	)
 	
