@@ -1,0 +1,10 @@
+[ADAMInstall]
+InstallType=Unique
+InstanceName=AD-LDS-Test
+NewApplicationPartitionToCreate="DC=test,DC=net"
+DataFilesPath=C:\Program Files\Microsoft ADAM\TestInstanz\data
+LogFilesPath=C:\Program Files\Microsoft ADAM\TestInstanz\data
+Administrator=contoso\Domain Admins
+ImportLDIFFiles="ms-user.ldf"
+SourceUserName=contoso\administrator
+SourcePassword=%PASSWORD%

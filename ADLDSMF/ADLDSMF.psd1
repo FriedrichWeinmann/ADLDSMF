@@ -3,7 +3,7 @@
 	RootModule        = 'ADLDSMF.psm1'
 	
 	# Version number of this module.
-	ModuleVersion     = '1.0.0'
+	ModuleVersion     = '1.0.2'
 	
 	# ID used to uniquely identify this module
 	GUID              = '4152b344-748f-43f4-9982-e0f0bec21185'
@@ -26,7 +26,7 @@
 	# Modules that must be imported into the global environment prior to importing
 	# this module
 	RequiredModules   = @(
-		@{ ModuleName = 'PSFramework'; ModuleVersion = '1.10.318' }
+		@{ ModuleName = 'PSFramework'; ModuleVersion = '1.12.346' }
 		@{ ModuleName = 'ADSec'; ModuleVersion = '1.0.1' }
 	)
 	

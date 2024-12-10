@@ -32,7 +32,7 @@ $serviceUser = 'svc.alpha'
 	Group       = 'AllUsers'
 	Member      = $serviceUser
 	Type        = 'user'
-	ObjectClass = 'groupmemberships'
+	ObjectClass = 'groupmembership'
 }
 
 # Access Rules
@@ -43,6 +43,7 @@ $serviceUser = 'svc.alpha'
 	IdentityType = 'User'
 	Rights = 'ManageChildren'
 	Inheritance = 'Descendents'
+	ObjectClass = 'accessrule'
 	# Type = 'Allow'
 }
 
@@ -53,5 +54,6 @@ $serviceUser = 'svc.alpha'
 	IdentityType = 'User'
 	Rights = 'EditObject'
 	Inheritance = 'Descendents'
+	ObjectClass = 'accessrule'
 	# Type = 'Allow'
 }

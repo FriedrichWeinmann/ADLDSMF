@@ -67,7 +67,7 @@
 				}
 				'Remove' {
 					$acl = Get-AdsAcl @ldsParam -Path $testItem.Identity
-					$null = $acl.RemoveAccessRule($testItem.Change.Rule)
+					$null = $acl.RemoveAccessRuleSpecific($testItem.Change.Rule)
 					$acl | Set-AdsAcl @ldsParam -Path $testItem.Identity
 				}
 			}

@@ -83,8 +83,17 @@
 				'Update' {
 					$update = @{ }
 					foreach ($change in $testItem.Change) {
+						# Workaround for something a lot easier with Set-ADUser than Set-ADObject
+						if ($change.Property -eq 'PasswordNeverExpires') {
+							Set-ADUser @ldsParam -Identity $testItem.ADObject.ObjectGUID -PasswordNeverExpires $change.New
+							continue
+						}
 						$update[$change.Property] = $change.New
 					}
+
+					# If the only change is PasswordNeverExpires, no need to call Set-ADObject
+					if ($update.Count -lt 1) { continue }
+
 					Set-ADObject @ldsParam -Identity $testItem.ADObject.ObjectGUID -Replace $update
 				}
 			}
