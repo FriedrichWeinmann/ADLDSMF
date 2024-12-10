@@ -53,7 +53,7 @@
 		Update-LdsConfiguration -LdsServer $Server -LdsPartition $Partition
 		$ldsParam = $PSBoundParameters | ConvertTo-PSFHashtable -Include Server, Partition, Credential
 		$ldsParamLight = $ldsParam | ConvertTo-PSFHashtable -Exclude Partition
-		$systemProperties = 'ObjectClass', 'Path', 'Name', 'Enabled'
+		$systemProperties = 'ObjectClass', 'Path', 'Name', 'Enabled', 'PasswordNeverExpires'
 	}
 	process {
 		if (-not $TestResult) {
@@ -73,6 +73,9 @@
 							Enabled = $true
 							AccountPassword = New-Password -AsSecureString
 						}
+					}
+					if ($testItem.Configuration.PasswordNeverExpires) {
+						$newParam.PasswordNeverExpires = $true
 					}
 					if (0 -eq $newParam.OtherAttributes.Count) { $newParam.Remove('OtherAttributes') }
 					New-ADUser @ldsParamLight @newParam
